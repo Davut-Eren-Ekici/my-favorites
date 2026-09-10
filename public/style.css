@@ -1,0 +1,127 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body{
+    background-color: #1e1e2e;
+    color: #cdd6f4;
+    padding: 20px;
+}
+.container{
+    max-width: 900px;
+    margin: 0 auto;
+}
+header{
+    text-align: center;
+    margin-bottom: 30px;
+}
+header h1{
+    color: #f5c2e7;
+    margin-bottom: 8px;
+}
+header p{
+    color: #a6adc8;
+}
+
+/* form alanı stilleri */
+.form-section{
+    background-color: #181825;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+.form-section h2{
+    color: #89b4fa;
+    margin-bottom: 15px;
+}
+.form-group{
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+}
+.form-group label{
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: #bac2de;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #45475a;
+    background-color: #313244;
+    color: #cdd6f4;
+    font-size: 1rem;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #89b4fa;
+}
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #a6e3a1;
+    color: #11111b;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+button:hover {
+    background-color: #94e2d5;
+}
+
+/* Listeleme ve  Kart Stilleri */
+.list-section h2 {
+    color: #89b4fa;
+    margin-bottom: 15px;
+}
+.favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+.card {
+    background-color: #313244;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 5px solid #89b4fa;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.card h3 {
+    color: #f9e2af;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.card .badge {
+    align-self: flex-start;
+    background-color: #45475a;
+    color: #cdd6f4;
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.card .rating {
+    color: #f9e2af;
+    margin-bottom: 8px;
+}
+
+.card .note {
+    font-size: 0.9rem;
+    color: #a6adc8;
+    font-style: italic;
+}

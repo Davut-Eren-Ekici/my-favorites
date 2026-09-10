@@ -1,11 +1,60 @@
  <!DOCTYPE html>
- <html lang="en">
- <head>
+<html lang="tr">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
- </head>
+    <title>My Favorites - Favorilerim</title>
+    <link rel="stylesheet" href="style.css">
+</head>
  <body>
-    
+    <div class="container">
+      <!-- Başlık -->
+       <header>
+         <h1>🌟 My Favorites</h1>
+         <p>En sevdiğin film, müzik, kitap ve hobileri tek bir yerde topla!</p>
+
+       </header>
+
+       <!-- favorileri ekleme formu -->
+       <section  class="form-section">
+         <h2>Yeni Favori Ekle</h2>
+         <form id="favorite-form">
+            <div class="form-group">
+               <label for="title">Başlık / isim:</label>
+               <input type="text" id="title" placeholder="Örn: Inception, Bohemian Rhapsody" required>
+            </div>
+
+            <div class="form-group">
+               <label for="category">Kategori:</label>
+               <select id="category" required>
+                  <option value="">Seçiniz</option>
+                  <option value="film">film / Dizi</option>
+                  <option value="müzik">müzik</option>
+                  <option value="kitap">kitap</option>
+                  <option value="kitap">kitap</option>
+                  <option value="hobi">hobi</option>
+                  <option value="yemek"></option>
+               </select>
+            </div>
+
+               <div class="form-group">
+                  <label for="rating">Puan (1-5):</label>
+                  <input type="number" id="rating" min="1" max="5" value="5" required>
+               </div>
+               <div class="form-group">
+                  <label for="note">Kişisel Not:</label>
+                  <textarea id="note" rows="3" placeholder="Neden çok seviyorsun?"></textarea>
+               </div>
+               <button type="submit">Ekle</button>
+         </form>
+       </section>
+       <section class="list-section">
+         <h2>Favorilerim</h2>
+         <div id="favorites-list" class="favorites-grid">
+            <!-- JavaScript Kartları buraya gelcek -->
+         </div>
+       </section>
+    </div>
+    <script src="script.js"></script>
  </body>
  </html>
