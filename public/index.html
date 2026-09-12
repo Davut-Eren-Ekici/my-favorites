@@ -1,97 +1,100 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Favorites Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>My Favorites Dashboard</title>
+   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <div class="app-layout">
-        <!-- SOL YAN MENÜ -->
-        <aside class="sidebar">
-            <div class="logo">
-                <h2>⭐ Favorites</h2>
-            </div>
-            <nav class="menu">
-                <button class="menu-btn active" id="nav-home">
-                    <span><span>🏠 Home</span></span>
-                </button>
-                <button class="menu-btn btn-dark-gray" id="nav-add">
-                    <span><span>➕ Ekle / Yönet</span></span>
-                </button>
-            </nav>
-        </aside>
+   <div class="app-layout">
+      <!-- SOL YAN MENÜ -->
+      <aside class="sidebar">
+         <div class="logo">
+            <h2>⭐ Favorites</h2>
+         </div>
+         <nav class="menu">
+            <button class="menu-btn active" id="nav-home">
+               <span><span>🏠 Home</span></span>
+            </button>
+            <button class="menu-btn btn-dark-gray" id="nav-add">
+               <span><span>➕ Ekle / Yönet</span></span>
+            </button>
+         </nav>
+      </aside>
 
-        <!-- SAĞ ANA ALAN -->
-        <main class="main-content">
+      <!-- SAĞ ANA ALAN -->
+      <main class="main-content">
 
-            <!-- ANA SAYFA GÖRÜNÜMÜ -->
-            <div id="page-home" class="page-view active">
-                <div class="hero-container">
-                    <!-- ASCII Canvas Arka Planı -->
-                    <canvas id="ascii-canvas"></canvas>
-                    
-                    <div class="hero-overlay">
-                        <div class="hero-left">
-                            <h1>Hoş Geldiniz 👋</h1>
-                            <p>Kişisel favorilerinizi kategorize edin ve puanlayın.</p>
+         <!-- ANA SAYFA GÖRÜNÜMÜ -->
+         <div id="page-home" class="page-view active">
+            <div class="hero-container">
+               <!-- ASCII Canvas Arka Planı -->
+               <canvas id="ascii-canvas"></canvas>
+
+               <div class="hero-overlay">
+                  <div class="hero-left">
+                     <h1>Hoş Geldiniz 👋</h1>
+                     <p>Kişisel favorilerinizi kategorize edin ve puanlayın.</p>
+                  </div>
+
+                  <!-- SAĞ TARAF: EN SON EKLENEN FAVORİLER -->
+                  <div class="hero-right">
+                     <div class="card-box recent-box">
+                        <h3>🔥 En Son Eklenenler</h3>
+                        <div id="recent-favorites-list" class="recent-grid">
+                           <!-- JS ile son 3 favori dolacak -->
                         </div>
-                        
-                        <!-- SAĞ TARAF: EN SON EKLENEN FAVORİLER -->
-                        <div class="hero-right">
-                            <div class="card-box recent-box">
-                                <h3>🔥 En Son Eklenenler</h3>
-                                <div id="recent-favorites-list" class="recent-grid">
-                                    <!-- JS ile son 3 favori dolacak -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                     </div>
+                  </div>
+               </div>
             </div>
+         </div>
 
-            <!-- FAVORİ EKLEME / LİSTELEME GÖRÜNÜMÜ -->
-            <div id="page-add" class="page-view" style="display: none;">
-                <div class="content-grid">
-                    <section class="card-box form-box">
-                        <form id="favorite-form">
-                            <div class="form-group">
-                                <label for="category">Kategori Seç</label>
-                                <select id="category" required>
-                                    <option value="">Seçiniz...</option>
-                                    <option value="film">Film</option>
-                                    <option value="müzik">Müzik</option>
-                                    <option value="kitap">Kitap</option>
-                                    <option value="hobi">Hobi</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="title">Başlık</label>
-                                <input type="text" id="title" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="rating">Puan (1-5 ⭐)</label>
-                                <input type="number" id="rating" min="1" max="5" value="5" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="note">Notlar</label>
-                                <textarea id="note" rows="3"></textarea>
-                            </div>
-                            <button type="submit"><span>Kaydet</span></button>
-                        </form>
-                    </section>
+         <!-- FAVORİ EKLEME / LİSTELEME GÖRÜNÜMÜ -->
+         <div id="page-add" class="page-view" style="display: none;">
+            <div class="content-grid">
+               <section class="card-box form-box">
+                  <form id="favorite-form">
+                     <div class="form-group">
+                        <label for="category">Kategori Seç</label>
+                        <select id="category" required>
+                           <option value="">Seçiniz...</option>
+                           <option value="film">Film</option>
+                           <option value="müzik">Müzik</option>
+                           <option value="kitap">Kitap</option>
+                           <option value="hobi">Hobi</option>
+                        </select>
+                     </div>
+                     <div class="form-group">
+                        <label for="title">Başlık</label>
+                        <input type="text" id="title" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="rating">Puan (1-5 ⭐)</label>
+                        <input type="number" id="rating" min="1" max="5" value="5" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="note">Notlar</label>
+                        <textarea id="note" rows="3"></textarea>
+                     </div>
+                     <button type="submit"><span>Kaydet</span></button>
+                  </form>
+               </section>
 
-                    <section class="card-box list-box">
-                        <div id="favorites-list" class="favorites-grid"></div>
-                    </section>
-                </div>
+               <section class="card-box list-box">
+                  <div id="favorites-list" class="favorites-grid"></div>
+               </section>
             </div>
+         </div>
 
-        </main>
-    </div>
+      </main>
+   </div>
 
-    <script src="script.js"></script>
+   <script src="script.js"></script>
 </body>
+
 </html>
