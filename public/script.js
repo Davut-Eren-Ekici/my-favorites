@@ -15,21 +15,21 @@ resizeCanvas();
 
 function renderAsciiEffect() {
     if (!ctx || !asciiCanvas) return;
-    ctx.fillStyle = '#11111b';
-    ctx.fillRect(0, 0, asciiCanvas.width, asciiCanvas.height);
+    ctx.fillStyle = 'transparent';
+    ctx.clearRect(0, 0, asciiCanvas.width, asciiCanvas.height);
 
-    const cellSize = 10;
+    const cellSize = 12;
     const cols = Math.floor(asciiCanvas.width / cellSize);
     const rows = Math.floor(asciiCanvas.height / cellSize);
     const charSet = " .:-=+*#%";
 
     ctx.font = `${cellSize}px monospace`;
-    ctx.fillStyle = '#3ca6ff';
+    ctx.fillStyle = 'rgba(34, 211, 238, 0.25)';
 
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
             const wave = Math.sin(c * 0.2 + r * 0.2 + Date.now() * 0.002);
-            if ((wave + 1) / 2 > 0.6) {
+            if ((wave + 1) / 2 > 0.65) {
                 const char = charSet[Math.floor(Math.random() * charSet.length)];
                 ctx.fillText(char, c * cellSize, r * cellSize);
             }
@@ -134,20 +134,29 @@ function createCardElement(item) {
     return card;
 }
 
-// Silme
-async function deleteFavorite(id) {
+// Global Silme İşlevi (Silince Anasayfaya Yönlendirir)
+window.deleteFavorite = async function(id) {
     if (!confirm('Silmek istediğinize emin misiniz?')) return;
     try {
         const response = await fetch(`/api/favorites/${id}`, { method: 'DELETE' });
         const result = await response.json();
-        if (result.success) fetchFavorites();
+        
+        if (result.success) {
+            if (editingId && String(editingId) === String(id)) {
+                editingId = null;
+                document.getElementById('favorite-form').reset();
+                document.querySelector('#submit-btn span span').innerText = 'Kaydet';
+            }
+            await fetchFavorites();
+            showView('home'); // Silme sonrası anasayfaya yönlendir
+        }
     } catch (err) {
         console.error('Silme hatası:', err);
     }
-}
+};
 
-// Düzenleme
-function editFavorite(id) {
+// Global Düzenleme İşlevi
+window.editFavorite = function(id) {
     const item = allFavorites.find(f => String(f.id) === String(id));
     if (!item) return;
 
@@ -159,7 +168,7 @@ function editFavorite(id) {
     editingId = id;
     showView('add');
     document.querySelector('#submit-btn span span').innerText = 'Güncelle';
-}
+};
 
 // Form Kaydet / Güncelle
 document.getElementById('favorite-form').addEventListener('submit', async (e) => {

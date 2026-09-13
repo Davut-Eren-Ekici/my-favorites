@@ -1,5 +1,11 @@
-const express = require('express');
-const path = require('path');
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// ES Module yapısında __dirname tanımı
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 const PORT = 5000;
 
@@ -47,7 +53,7 @@ app.delete('/api/favorites/:id', (req, res) => {
     res.json({ success: true, message: "Favori silindi." });
 });
 
-// PUT: Favori güncelle (Üstüne Yaz)
+// PUT: Favori güncelle
 app.put('/api/favorites/:id', (req, res) => {
     const { id } = req.params;
     const { title, category, rating, note } = req.body;

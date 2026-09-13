@@ -6,7 +6,7 @@
 }
 
 body {
-    background-color: #11111b;
+    background-color: #000000;
     color: #cdd6f4;
     height: 100vh;
     overflow: hidden;
@@ -20,16 +20,17 @@ body {
 /* Sidebar */
 .sidebar {
     width: 240px;
-    background-color: #181825;
-    border-right: 2px solid #313244;
+    background-color: #05080f;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     flex-direction: column;
     padding: 20px 15px;
     gap: 15px;
+    z-index: 20;
 }
 
 .logo h2 {
-    color: #f5c2e7;
+    color: #22d3ee;
     text-align: center;
     margin-bottom: 10px;
 }
@@ -137,7 +138,7 @@ button:active > span {
     box-shadow: 0 0 8px rgba(59, 130, 246, 0.6) !important;
 }
 
-/* Ana Alan */
+/* Ana Alan & Gradient Background Entegrasyonu */
 .main-content {
     flex: 1;
     position: relative;
@@ -147,7 +148,36 @@ button:active > span {
 .hero-container {
     position: relative;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #000000 0%, #05080F 20%, #032F3A 40%, #0891b2 70%, #22d3ee 100%);
+    overflow: hidden;
+}
+
+/* Görsel Katmanı */
+.hero-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.05;
+    background-image: url("https://cdn.21st.dev/assets/mirror/f5/f55dfc553c100e6da0ad95258a042b4100f0ff4bb03a5313d1f541984275e262.png");
+    background-size: 149.76px;
+    background-repeat: repeat;
+    pointer-events: none;
+}
+
+/* Izgara ve Çapraz Çizgiler Katmanı */
+.hero-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.15;
+    background-image: 
+        linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
+        linear-gradient(45deg, rgba(255,255,255,0.08) 1px, transparent 1px),
+        linear-gradient(-45deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size: 60px 60px, 60px 60px, 40px 40px, 40px 40px;
+    pointer-events: none;
 }
 
 #ascii-canvas {
@@ -157,11 +187,12 @@ button:active > span {
     width: 100%;
     height: 100%;
     z-index: 1;
+    pointer-events: none;
 }
 
 .hero-overlay {
     position: relative;
-    z-index: 2;
+    z-index: 10;
     display: flex;
     justify-content: space-between;
     padding: 40px;
@@ -172,11 +203,15 @@ button:active > span {
     grid-template-columns: 320px 1fr;
     gap: 20px;
     padding: 25px;
+    position: relative;
+    z-index: 10;
 }
 
 .card-box {
-    background-color: #1e1e2e;
-    border: 1px solid #313244;
+    background-color: rgba(5, 8, 15, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
     border-radius: 12px;
     padding: 20px;
 }
@@ -189,8 +224,8 @@ button:active > span {
 
 input, textarea {
     padding: 10px;
-    background-color: #313244;
-    border: 1px solid #45475a;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 6px;
     color: #cdd6f4;
 }
@@ -210,10 +245,15 @@ input, textarea {
 }
 
 .card {
-    background-color: #313244;
+    background-color: rgba(15, 23, 42, 0.75);
     padding: 15px;
     border-radius: 8px;
-    border-left: 4px solid #89b4fa;
+    border-left: 4px solid #22d3ee;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
     position: relative;
 }
 
