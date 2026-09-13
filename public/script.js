@@ -1,43 +1,65 @@
 let allFavorites = [];
 let editingId = null;
 
-// ASCII Canvas
+// Canvas setup
 const asciiCanvas = document.getElementById('ascii-canvas');
 const ctx = asciiCanvas ? asciiCanvas.getContext('2d') : null;
+
+// Kar Yağışı (Snowfall) Efekti
+const snowflakes = [];
+const maxFlakes = 60; // Kar tanesi miktarı
+
+function initSnow() {
+    snowflakes.length = 0;
+    if (!asciiCanvas) return;
+    for (let i = 0; i < maxFlakes; i++) {
+        snowflakes.push({
+            x: Math.random() * asciiCanvas.width,
+            y: Math.random() * asciiCanvas.height,
+            radius: Math.random() * 2.5 + 1, // Kar tanesi boyutu
+            speed: Math.random() * 1.2 + 0.5, // Düşüş hızı
+            wind: Math.random() * 0.5 - 0.25,  // Sağa/sola süzülme
+            opacity: Math.random() * 0.6 + 0.3
+        });
+    }
+}
+
+function renderSnowEffect() {
+    if (!ctx || !asciiCanvas) return;
+    ctx.clearRect(0, 0, asciiCanvas.width, asciiCanvas.height);
+
+    snowflakes.forEach(flake => {
+        ctx.beginPath();
+        ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${flake.opacity})`;
+        ctx.fill();
+
+        // Kar tanelerinin düşüş hareketi
+        flake.y += flake.speed;
+        flake.x += flake.wind;
+
+        // Ekran altına ulaşınca yukarıdan tekrar başlat
+        if (flake.y > asciiCanvas.height) {
+            flake.y = -5;
+            flake.x = Math.random() * asciiCanvas.width;
+        }
+        if (flake.x > asciiCanvas.width) flake.x = 0;
+        if (flake.x < 0) flake.x = asciiCanvas.width;
+    });
+
+    requestAnimationFrame(renderSnowEffect);
+}
 
 function resizeCanvas() {
     if (!asciiCanvas) return;
     asciiCanvas.width = asciiCanvas.parentElement.clientWidth;
     asciiCanvas.height = asciiCanvas.parentElement.clientHeight;
+    initSnow();
 }
+
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
-
-function renderAsciiEffect() {
-    if (!ctx || !asciiCanvas) return;
-    ctx.fillStyle = 'transparent';
-    ctx.clearRect(0, 0, asciiCanvas.width, asciiCanvas.height);
-
-    const cellSize = 12;
-    const cols = Math.floor(asciiCanvas.width / cellSize);
-    const rows = Math.floor(asciiCanvas.height / cellSize);
-    const charSet = " .:-=+*#%";
-
-    ctx.font = `${cellSize}px monospace`;
-    ctx.fillStyle = 'rgba(34, 211, 238, 0.25)';
-
-    for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-            const wave = Math.sin(c * 0.2 + r * 0.2 + Date.now() * 0.002);
-            if ((wave + 1) / 2 > 0.65) {
-                const char = charSet[Math.floor(Math.random() * charSet.length)];
-                ctx.fillText(char, c * cellSize, r * cellSize);
-            }
-        }
-    }
-    requestAnimationFrame(renderAsciiEffect);
-}
-renderAsciiEffect();
+renderSnowEffect();
 
 // Sayfa Geçişleri
 function showView(viewName) {
@@ -58,8 +80,8 @@ async function fetchFavorites() {
         const response = await fetch('/api/favorites');
         const result = await response.json();
 
-        if (result.success) {
-            allFavorites = result.data;
+        if (result.success || Array.isArray(result.data)) {
+            allFavorites = result.data || result;
             renderAllViews();
         }
     } catch (err) {
@@ -75,21 +97,24 @@ function renderAllViews() {
 
 function renderFavoritesList() {
     const list = document.getElementById('favorites-list');
+    if (!list) return;
     list.innerHTML = allFavorites.length === 0 ? '<p>Henüz kayıt yok.</p>' : '';
     allFavorites.forEach(item => list.appendChild(createCardElement(item)));
 }
 
 function renderRecentFavorites() {
     const list = document.getElementById('recent-favorites-list');
+    if (!list) return;
     list.innerHTML = '';
     [...allFavorites].reverse().slice(0, 3).forEach(item => list.appendChild(createCardElement(item)));
 }
 
 function renderDynamicCategories() {
     const container = document.getElementById('dynamic-categories');
+    if (!container) return;
     container.innerHTML = '';
 
-    const categories = [...new Set(allFavorites.map(item => item.category.trim().toLowerCase()))];
+    const categories = [...new Set(allFavorites.map(item => item.category ? item.category.trim().toLowerCase() : ''))].filter(Boolean);
 
     categories.forEach(cat => {
         const btn = document.createElement('button');
@@ -104,17 +129,18 @@ function showCategoryPage(categoryName) {
     showView('category');
     document.getElementById('category-title').innerText = `${categoryName.toUpperCase()} KATEGORİSİ`;
     const container = document.getElementById('category-favorites-list');
+    if (!container) return;
     container.innerHTML = '';
 
     allFavorites
-        .filter(item => item.category.trim().toLowerCase() === categoryName)
+        .filter(item => item.category && item.category.trim().toLowerCase() === categoryName)
         .forEach(item => container.appendChild(createCardElement(item)));
 }
 
 function createCardElement(item) {
     const card = document.createElement('div');
     card.className = 'card';
-    const stars = '★'.repeat(item.rating) + '☆'.repeat(5 - item.rating);
+    const stars = '★'.repeat(item.rating || 5) + '☆'.repeat(5 - (item.rating || 5));
 
     card.innerHTML = `
         <h3>${item.title}</h3>
@@ -134,28 +160,29 @@ function createCardElement(item) {
     return card;
 }
 
-// Global Silme İşlevi (Silince Anasayfaya Yönlendirir)
+// Global Silme
 window.deleteFavorite = async function(id) {
     if (!confirm('Silmek istediğinize emin misiniz?')) return;
     try {
         const response = await fetch(`/api/favorites/${id}`, { method: 'DELETE' });
         const result = await response.json();
         
-        if (result.success) {
+        if (result.success || response.ok) {
             if (editingId && String(editingId) === String(id)) {
                 editingId = null;
                 document.getElementById('favorite-form').reset();
-                document.querySelector('#submit-btn span span').innerText = 'Kaydet';
+                const btnText = document.querySelector('#submit-btn span span');
+                if (btnText) btnText.innerText = 'Kaydet';
             }
             await fetchFavorites();
-            showView('home'); // Silme sonrası anasayfaya yönlendir
+            showView('home');
         }
     } catch (err) {
         console.error('Silme hatası:', err);
     }
 };
 
-// Global Düzenleme İşlevi
+// Global Düzenleme
 window.editFavorite = function(id) {
     const item = allFavorites.find(f => String(f.id) === String(id));
     if (!item) return;
@@ -167,19 +194,20 @@ window.editFavorite = function(id) {
 
     editingId = id;
     showView('add');
-    document.querySelector('#submit-btn span span').innerText = 'Güncelle';
+    const btnText = document.querySelector('#submit-btn span span');
+    if (btnText) btnText.innerText = 'Güncelle';
 };
 
-// Form Kaydet / Güncelle
+// Form Kaydet / Güncelle (Düzeltilen Kısım)
 document.getElementById('favorite-form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const title = document.getElementById('title').value;
     const category = document.getElementById('category').value;
-    const rating = document.getElementById('rating').value;
+    const rating = Number(document.getElementById('rating').value);
     const note = document.getElementById('note').value;
 
-    const payload = { title, category, rating: Number(rating), note };
+    const payload = { title, category, rating, note };
 
     try {
         let response;
@@ -193,16 +221,18 @@ document.getElementById('favorite-form').addEventListener('submit', async (e) =>
             response = await fetch('/api/favorites', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: Date.now(), ...payload })
+                body: JSON.stringify({ id: Date.now().toString(), ...payload })
             });
         }
 
         const result = await response.json();
-        if (result.success) {
+        if (result.success || response.ok) {
             editingId = null;
             document.getElementById('favorite-form').reset();
-            document.querySelector('#submit-btn span span').innerText = 'Kaydet';
-            fetchFavorites();
+            const btnText = document.querySelector('#submit-btn span span');
+            if (btnText) btnText.innerText = 'Kaydet';
+            await fetchFavorites();
+            showView('home');
         }
     } catch (err) {
         console.error('İşlem hatası:', err);

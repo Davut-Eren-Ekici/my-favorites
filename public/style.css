@@ -138,7 +138,7 @@ button:active > span {
     box-shadow: 0 0 8px rgba(59, 130, 246, 0.6) !important;
 }
 
-/* Ana Alan & Gradient Background Entegrasyonu */
+/* Ana Alan & Gradient Background */
 .main-content {
     flex: 1;
     position: relative;
@@ -153,30 +153,21 @@ button:active > span {
     overflow: hidden;
 }
 
-/* Görsel Katmanı */
+/* Çapraz noktalı bant resmi tamamen kaldırıldı */
 .hero-container::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    opacity: 0.05;
-    background-image: url("https://cdn.21st.dev/assets/mirror/f5/f55dfc553c100e6da0ad95258a042b4100f0ff4bb03a5313d1f541984275e262.png");
-    background-size: 149.76px;
-    background-repeat: repeat;
-    pointer-events: none;
+    display: none;
 }
 
-/* Izgara ve Çapraz Çizgiler Katmanı */
+/* Temiz Izgara Katmanı */
 .hero-container::after {
     content: '';
     position: absolute;
     inset: 0;
     opacity: 0.15;
     background-image: 
-        linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
-        linear-gradient(45deg, rgba(255,255,255,0.08) 1px, transparent 1px),
-        linear-gradient(-45deg, rgba(255,255,255,0.08) 1px, transparent 1px);
-    background-size: 60px 60px, 60px 60px, 40px 40px, 40px 40px;
+        linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 60px 60px;
     pointer-events: none;
 }
 
@@ -262,4 +253,24 @@ input, textarea {
     justify-content: flex-end;
     gap: 8px;
     margin-top: 12px;
+}
+
+/* Ekle Sayfası Karlı Manzara Konumlandırması */
+.winter-landscape-bg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.winter-landscape-bg svg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
 }

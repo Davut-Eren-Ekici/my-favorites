@@ -23,7 +23,7 @@ app.get('/api/favorites', (req, res) => {
 // POST: Yeni favori ekle
 app.post('/api/favorites', (req, res) => {
     const { id, title, category, rating, note } = req.body;
-    
+
     if (!title || !category) {
         return res.status(400).json({ success: false, message: "Başlık ve kategori zorunludur." });
     }
