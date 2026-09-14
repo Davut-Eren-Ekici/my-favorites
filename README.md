@@ -41,3 +41,19 @@ Projeyi kendi bilgisayarınızda çalıştırmak için aşağıdaki adımları t
    ```bash
    git clone [https://github.com/davut-eren-ekici/my-favorites.git](https://github.com/davut-eren-ekici/my-favorites.git)
    cd my-favorites
+
+   📂 Proje Yapısı
+Plaintext
+my-favorites/
+├── public/
+│   ├── index.html       # Ana HTML yapısı ve sayfa görünümleri
+│   ├── style.css        # Cam efekti, kış teması ve responsive stiller
+│   └── script.js        # Canvas animasyonu, API istekleri ve DOM yönetimi
+├── server.js            # Express.js REST API sunucusu
+├── package.json         # Proje bağımlılıkları ve script'ler
+└── README.md            # Proje dokümantasyonu
+
+
+
+📝 Lisans
+Bu proje MIT lisansı altında korunmaktadır. İstediğiniz gibi çatallayabilir (fork) ve geliştirebilirsiniz.
