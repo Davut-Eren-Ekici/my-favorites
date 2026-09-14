@@ -1,4 +1,4 @@
-# ❄️ My Favorites Dashboard
+# ❄️ My Favorites Dashboard      
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-22d3ee?style=for-the-badge&logo=github&logoColor=white)](https://davut-eren-ekici.github.io/my-favorites/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-f7df1e?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
