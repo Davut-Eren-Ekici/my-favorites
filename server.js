@@ -2,18 +2,23 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// ES Module yapısında __dirname tanımı
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 3000;
 
+// Gelen JSON gövdelerini ayrıştırmak için zorunlu middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Statik dosyaları sunma
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Geçici Bellek (In-memory storage)
-let favorites = [];
+// Örnek veri hafızası
+let favorites = [
+    { id: "1", title: "Inception", category: "Film", rating: 5, note: "Harika bir bilim kurgu." }
+];
 
 // GET: Tüm favorileri getir
 app.get('/api/favorites', (req, res) => {
@@ -22,52 +27,38 @@ app.get('/api/favorites', (req, res) => {
 
 // POST: Yeni favori ekle
 app.post('/api/favorites', (req, res) => {
-    const { id, title, category, rating, note } = req.body;
+    const { title, category, rating, note } = req.body;
 
     if (!title || !category) {
-        return res.status(400).json({ success: false, message: "Başlık ve kategori zorunludur." });
+        return res.status(400).json({ success: false, message: 'Başlık ve kategori zorunludur.' });
     }
 
-    const newItem = {
-        id: id || Date.now(),
+    const newFavorite = {
+        id: String(req.body.id || Date.now()),
         title,
-        category: category.trim().toLowerCase(),
+        category,
         rating: Number(rating) || 5,
-        note: note || ""
+        note: note || ''
     };
 
-    favorites.push(newItem);
-    res.json({ success: true, data: newItem });
+    favorites.push(newFavorite);
+    res.status(201).json({ success: true, data: newFavorite });
 });
 
-// DELETE: Favori sil
-app.delete('/api/favorites/:id', (req, res) => {
-    const { id } = req.params;
-    const index = favorites.findIndex(item => String(item.id) === String(id));
-
-    if (index === -1) {
-        return res.status(404).json({ success: false, message: "Favori bulunamadı." });
-    }
-
-    favorites.splice(index, 1);
-    res.json({ success: true, message: "Favori silindi." });
-});
-
-// PUT: Favori güncelle
+// PUT: Varolan favoriyi güncelle
 app.put('/api/favorites/:id', (req, res) => {
     const { id } = req.params;
     const { title, category, rating, note } = req.body;
 
-    const index = favorites.findIndex(item => String(item.id) === String(id));
-
+    const index = favorites.findIndex(f => String(f.id) === String(id));
     if (index === -1) {
-        return res.status(404).json({ success: false, message: "Favori bulunamadı." });
+        return res.status(404).json({ success: false, message: 'Kayıt bulunamadı.' });
     }
 
     favorites[index] = {
         ...favorites[index],
         title: title || favorites[index].title,
-        category: category ? category.trim().toLowerCase() : favorites[index].category,
+        category: category || favorites[index].category,
         rating: rating !== undefined ? Number(rating) : favorites[index].rating,
         note: note !== undefined ? note : favorites[index].note
     };
@@ -75,6 +66,13 @@ app.put('/api/favorites/:id', (req, res) => {
     res.json({ success: true, data: favorites[index] });
 });
 
+// DELETE: Favori sil
+app.delete('/api/favorites/:id', (req, res) => {
+    const { id } = req.params;
+    favorites = favorites.filter(f => String(f.id) !== String(id));
+    res.json({ success: true, message: 'Kayıt silindi.' });
+});
+
 app.listen(PORT, () => {
-    console.log(`Sunucu ${PORT} portunda çalışıyor...`);
+    console.log(`Sunucu http://localhost:${PORT} adresinde çalışıyor...`);
 });
